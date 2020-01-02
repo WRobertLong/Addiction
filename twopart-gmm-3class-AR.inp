@@ -1,0 +1,56 @@
+TITLE:  two-part (semicontinuous) growth model for 
+        a continuous outcome IMPUTED
+DATA:		FILE IS dt.mp.imp1.csv;
+
+DATA TWOPART:
+        NAMES = u1-u9;
+        BINARY = bin1-bin9;
+        CONTINUOUS = cont1-cont9;
+
+VARIABLE:	NAMES ARE u0-u9 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10;
+        USEVARIABLES = x1 bin1-bin9 cont1-cont9;
+        CATEGORICAL = bin1-bin9;
+        MISSING = ALL(999);
+		CLASSES = c(3);
+ 		!COUNT = u1-u9(nb);
+        !MISSING = ALL (999);
+
+ANALYSIS:	
+          ESTIMATOR = MLR;
+          TYPE = MIXTURE;
+          PROCESSORS = 8 ;
+  		  ALGORITHM = INTEGRATION;
+          STARTS = 2000 50;
+MODEL:
+        %OVERALL%
+  		iu su | bin1@0 bin2@1 bin3@2 bin4@3 bin5@7 bin6@11
+          bin7@15 bin8@19 bin9@23;
+          
+        iy sy | cont1@0 cont2@1 cont3@2 cont4@3 cont5@7
+          cont6@11 cont7@15 cont8@19 cont9@23;
+
+        cont1 WITH cont2; cont2 WITH cont3; cont3 WITH cont4;
+ 
+        su@0;
+        sy@0;
+        iy WITH iu;
+
+        c iu su iy sy ON x1 ;
+
+        %c#2%
+        iy WITH iu;
+        iu su iy sy ON x1 ;
+
+        cont1 WITH cont2; cont2 WITH cont3; cont3 WITH cont4;
+
+        %c#3%
+        iy WITH iu;
+        iu su iy sy ON x1 ;
+
+        cont1 WITH cont2; cont2 WITH cont3; cont3 WITH cont4;
+
+PLOT:   SERIES = cont1-cont9 (sy);
+        TYPE = PLOT3;
+
+
+OUTPUT:	TECH1 TECH4 TECH8;

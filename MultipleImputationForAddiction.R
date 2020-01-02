@@ -8,7 +8,7 @@ require(scapeMCMC) #mcmc plots
 
 ############################
 #
-# Multiple Imputation for Addition paper
+# Multiple Imputation for Addiction paper
 # By WR Long 16 Jan 2013
 # 
 #

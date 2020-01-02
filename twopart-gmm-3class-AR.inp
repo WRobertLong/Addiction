@@ -1,3 +1,5 @@
+! Latent class model for Addiction data (growth mixture model
+! Fitted with MPlus
 TITLE:  two-part (semicontinuous) growth model for 
         a continuous outcome IMPUTED
 DATA:		FILE IS dt.mp.imp1.csv;
